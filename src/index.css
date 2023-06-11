@@ -1,0 +1,11 @@
+.drop-down {
+  display: flex;
+  justify-content: space-around;
+  gap:200px;
+  margin-top: 200px;
+}
+
+#name {
+  color: blue;
+  margin-left: 10px;
+}
