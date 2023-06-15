@@ -1,11 +1,11 @@
 import api from "../api/userManagement";
 import { useEffect, useState } from "react";
-import { Autocomplete, TextField } from "@mui/material"
+import { Autocomplete, Card, CardContent, TextField } from "@mui/material"
 
 function Users() {
     const [users, setUsers] = useState([]);
     const [name, setName] = useState("");
-
+    const [user, setUser] = useState({});
 
     useEffect(()=> {
         getUsers();
@@ -18,25 +18,39 @@ function Users() {
     setUsers(data);
     }
 
+   
     const UserData = users.map((user) => user.name).sort();
+
+    const getUserJson = (name) => {
+        const person = users.filter((user) => user.name === name)[0];
+        setUser(person);
+    }
 
     return (
         <div className="drop-down">
             <div>
                 {/* {Search /Drop Down with Names sorted in Ascending order} */}
-                
+
                 <Autocomplete
                     
                     disablePortal
                     options={UserData}
                     sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} onSelect={(e) => {setName(e.target.value)}} label="Search or Choose the user name" />}
+                    renderInput={(params) => <TextField {...params} onSelect={(e) => {setName(e.target.value); getUserJson(e.target.value)}} label="Search or Choose the user name" />}
                 />
                 
             </div>
-                <h2>You have selected the name: <span id="name">{
-                    (UserData.includes(name)) ? name :  null
-                }</span></h2>
+            <div>
+                {(UserData.includes(name)) 
+                ? 
+                    <Card sx={{ minWidth: 275 }}>
+                    <CardContent>
+                        <pre>{JSON.stringify(user, null, 2)}</pre>
+                    </CardContent>
+                </Card>
+                : null
+                }
+            </div>
         </div>
     )
 }
