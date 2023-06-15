@@ -1,5 +1,7 @@
 import api from "../api/userManagement";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import { Autocomplete, TextField } from "@mui/material"
+
 function Users() {
     const [users, setUsers] = useState([]);
     const [name, setName] = useState("");
@@ -16,19 +18,25 @@ function Users() {
     setUsers(data);
     }
 
+    const UserData = users.map((user) => user.name).sort();
+
     return (
         <div className="drop-down">
             <div>
-                <h2>Select any of the name below:</h2>
-                <select onChange={(e) => {setName(e.target.value)}}>
-                    {
-                        users.map((user) => {
-                            return <option key={user.id}>{user.name}</option>
-                        })
-                    }
-                </select>
+                {/* {Search /Drop Down with Names sorted in Ascending order} */}
+                
+                <Autocomplete
+                    
+                    disablePortal
+                    options={UserData}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} onSelect={(e) => {setName(e.target.value)}} label="Search or Choose the user name" />}
+                />
+                
             </div>
-                <h2>You have selected the name: <span id="name">{name}</span></h2>
+                <h2>You have selected the name: <span id="name">{
+                    (UserData.includes(name)) ? name :  null
+                }</span></h2>
         </div>
     )
 }
